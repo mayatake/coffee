@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="ja">
+    <meta charset="UTF-8"/>
+    <title>Coffee Order Site</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+          th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap-theme.min.css}"/>
+    <link href="/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+    
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<a class="navbar-brand" href="/orders"><img src="img/coffee.png" alt="..." class="img-rounded"/></a>
+	<p class="navbar-text">T's Cafe</p>
+</div>
+
+<!-- <video autoplay="true" loop="true" src="http://webcreatorbox.com/sample/images/jewellery.mov">
+  <img src="http://webcreatorbox.com/sample/images/jewellery.jpg" alt="Placeholder"/>
+</video>
+-->
+ <header class="jumbotron">
+      <div class="container">
+        <h1>Hand Drip Coffee</h1>
+        <p>手で入れた極上のコーヒーを提供します。缶コーヒー、マシンドリップとは一味違うハンドドリップの香りをお楽しみください。</p>
+        <p><a class="btn btn-lg" role="button">もっと詳しく &raquo;</a></p>
+      </div>
+</header>
+
+<div class="container">
+    <h1>Coffee注文システム</h1>
+    
+    <div class="col-sm-12">
+        <form th:action="@{/orders/confirm}" th:object="${orderForm}" class="form-horizontal" method="post">
+            <fieldset>
+                <legend>Coffee注文作成</legend>
+                <div class="form-group" th:classappend="${#fields.hasErrors('firstName')}? 'has-error has-feedback'">
+                    <label for="firstName" class="col-sm-2 control-label">注文者</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" id="firstName" name="firstName" th:field="*{firstName}"
+                               class="form-control" value="太郎" placeholder="名前を書いてください"/>
+                        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                              class="help-block">error!</span>
+                    </div>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('volume')}? 'has-error has-feedback'">
+                    <label for="volume" class="col-sm-2 control-label">注文数</label>
+
+                    <div class="col-sm-10">
+                        <select class="form-control" id="volume" name="volume">
+                        	<option value="1" selected="selected">1</option>
+        					<option value="2">2</option>
+        					<option value="3">3</option>
+        					<option value="4">4</option>
+        					<option value="5">5</option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('volume')}" th:errors="*{volume}"
+                              class="help-block">error!</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">注文</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <hr/>
+        <h4>Coffee注文一覧</h4>
+        <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>ID</th>
+                <th>注文者</th>
+                <th>注文数</th>
+                <th>注文時刻</th>
+                <th colspan="2">編集</th>
+            </tr>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}">100</td>
+                <td th:text="${customer.firstName}">太郎</td>
+                <td th:text="${customer.volume}">1</td>
+                <td th:text="${customer.date}">YYYYMMDDHHMMSS</td>
+                <td>
+                    <form th:action="@{/orders/edit}" method="get">
+                        <input class="btn btn-default" type="submit" name="form" value="編集"/>
+                        <input type="hidden" name="id" th:value="${customer.id}"/>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/orders/delete}" method="post">
+                        <input class="btn btn-danger" type="submit" value="削除"/>
+                        <input type="hidden" name="id" th:value="${customer.id}"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<footer class="container-fluid">
+  <small><a href="/orders">Copyright (C) koyamalab All Rights Reserved.</a></small>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

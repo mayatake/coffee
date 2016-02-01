@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Coffee Order Site</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+          th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap-theme.min.css}"/>
+    <link href="/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+    
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<a class="navbar-brand" href="/orders"><img src="img/coffee.png" alt="..." class="img-rounded"/></a>
+	<p class="navbar-text">T's Cafe</p>
+</div>
+ <header class="jumbotron">
+      <div class="container">
+        <h1>Hand Drip Coffee</h1>
+        <p>手で入れた極上のコーヒーを提供します。缶コーヒー、マシンドリップとは一味違うハンドドリップの香りをお楽しみください。</p>
+        <p><a class="btn btn-lg" role="button">もっと詳しく &raquo;</a></p>
+      </div>
+</header>
+
+<div class="container">
+    <h1>Coffee注文システム</h1>
+    
+    <div class="col-sm-12">
+        <h4>Coffee注文一覧</h4>
+        <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>ID</th>
+                <th>注文者</th>
+                <th>注文数</th>
+                <th>注文時刻</th>
+                <th>処理済み</th>
+                <th colspan="2">編集</th>
+            </tr>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}">100</td>
+                <td th:text="${customer.firstName}">太郎</td>
+                <td th:text="${customer.volume}">1</td>
+                <td th:text="${customer.date}">YYYYMMDDHHMMSS</td>
+                <td th:text="${customer.done}">false</td>
+                <td>
+                    <form th:action="@{/orders/check}" method="get">
+                        <input th:if="${customer.done == false}" class="btn btn-warning" type="submit" name="form" value="処理"/>
+                        <input th:if="${customer.done == true}" class="btn btn-default" type="submit" disabled="disabled" value="処理"/>
+                        <input type="hidden" name="id" th:value="${customer.id}"/>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/orders/delete}" method="post">
+                        <input class="btn btn-danger" type="submit" value="削除"/>
+                        <input type="hidden" name="id" th:value="${customer.id}"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<footer class="container-fluid">
+  <small><a href="/orders">Copyright (C) koyamalab All Rights Reserved.</a></small>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>
